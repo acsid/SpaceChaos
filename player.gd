@@ -11,8 +11,9 @@ const JUMP_VELOCITY = 4.5
 @export var shield_regen := 0.1
 @export var username := ""
 var can_orbit = false
-var orbit = Vector3.ZERO
-var canshoot = true
+var orbit = PackedScene.new()
+var is_orbit = false
+var canshoot = false
 var d := 0.0
 var laser = preload("res://weapons/laser.tscn")
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -39,6 +40,12 @@ func _process(delta):
 	if not alive: return
 	if not is_multiplayer_authority():
 		return
+	if Input.is_action_just_pressed("orbit"):
+		if can_orbit:
+			if is_orbit:
+				is_orbit = false
+			else:
+				is_orbit = true
 	if Input.is_action_pressed("shoot") and canshoot:
 		shoot.rpc(str(rid_allocate_id()))
 		canshoot = false
@@ -75,9 +82,14 @@ func _physics_process(delta):
 		velocity = velocity.move_toward(Vector3.ZERO,0.1)
 	
 	move_and_slide()
+	
 
 func orbiting():
-	pass
+	if can_orbit && is_orbit:
+		position = position.move_toward(orbit.global_position,0.1)
+	else:
+		is_orbit = false
+	
 	
 @rpc("call_local", "any_peer")
 func addScore(pts):

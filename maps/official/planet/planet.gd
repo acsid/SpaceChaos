@@ -9,13 +9,14 @@ var population = 10
 func _ready():
 	if multiplayer.is_server():
 		$Timer.start()
-	pass # Replace with function body.
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	rotate_z(deg_to_rad(0.05))
-	pass
+	%Area3D.rotate_z(deg_to_rad(0.1))
+
 
 
 func _on_area_3d_body_entered(body):
@@ -23,7 +24,7 @@ func _on_area_3d_body_entered(body):
 	if body.is_in_group("humans"):
 		get_tree().get_current_scene().send_message("RADIO:" ,"You can orbit the planet",false)
 		body.can_orbit = true
-		body.orbit = global_position
+		body.orbit = $Area3D/orbitpoint
 
 
 func _on_area_3d_body_exited(body):
