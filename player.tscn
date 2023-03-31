@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=3 uid="uid://cvy6bqqrg8fbk"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_hpumn"]
+[ext_resource type="Script" path="res://FollowCamera.gd" id="2_akhb5"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_0dwdc"]
+size = Vector3(5, 7, 2)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rsley"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/2/path = NodePath(".:hitpoint")
+properties/2/spawn = true
+properties/2/sync = true
+properties/3/path = NodePath(".:username")
+properties/3/spawn = true
+properties/3/sync = false
+properties/4/path = NodePath(".:score")
+properties/4/spawn = true
+properties/4/sync = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qwfyb"]
+size = Vector3(5, 5, 5)
+
+[node name="Player" type="CharacterBody3D" groups=["humans"]]
+axis_lock_linear_z = true
+script = ExtResource("1_hpumn")
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+mesh = SubResource("PrismMesh_0dwdc")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_rsley")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 26)
+top_level = true
+script = ExtResource("2_akhb5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.149928)
+shape = SubResource("BoxShape3D_qwfyb")
+
+[node name="Guns" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+
+[node name="Cooldown" type="Timer" parent="Guns"]
+unique_name_in_owner = true
+wait_time = 0.1
+
+[node name="Respawn" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 10.0
+one_shot = true
+
+[connection signal="timeout" from="Guns/Cooldown" to="." method="_on_cooldown_timeout"]
+[connection signal="timeout" from="Respawn" to="." method="_on_timer_timeout"]

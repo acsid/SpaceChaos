@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=3 uid="uid://dq6iads52vnrk"]
+
+[ext_resource type="Script" path="res://maps/official/planet/planet.gd" id="1_v4yft"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_dsyuq"]
+radius = 10.0
+height = 20.0
+radial_segments = 34
+rings = 10
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ndpme"]
+emission_enabled = true
+emission = Color(0.282353, 0.321569, 0.372549, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qj2r2"]
+radius = 27.0862
+
+[sub_resource type="BoxMesh" id="BoxMesh_e74cx"]
+size = Vector3(5, 5, 5)
+
+[node name="Planet" type="CSGMesh3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.7812, 0, 0)
+mesh = SubResource("SphereMesh_dsyuq")
+material = SubResource("StandardMaterial3D_ndpme")
+script = ExtResource("1_v4yft")
+
+[node name="Area3D" type="Area3D" parent="."]
+gravity_space_override = 3
+gravity_point = true
+gravity_point_center = Vector3(1, 1, 0)
+gravity_direction = Vector3(1, 1, 0)
+gravity = -32.0
+linear_damp_space_override = 1
+angular_damp_space_override = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_qj2r2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.4935)
+mesh = SubResource("BoxMesh_e74cx")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 15.0
+
+[node name="Spawn" type="Node3D" parent="." groups=["Spawners"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.786, 0, 13.032)
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

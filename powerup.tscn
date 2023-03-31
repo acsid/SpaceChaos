@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8llfk8l33522"]
+
+[ext_resource type="Script" path="res://Powerup.gd" id="1_tqopy"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_nu2bg"]
+radius = 0.4
+height = 1.0
+radial_segments = 4
+rings = 1
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_toj3l"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_a4vb4"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+
+[node name="Powerup" type="Area3D"]
+script = ExtResource("1_tqopy")
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+mesh = SubResource("CapsuleMesh_nu2bg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_toj3l")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.1
+replication_config = SubResource("SceneReplicationConfig_a4vb4")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 300.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.882353, 0.419608, 0.203922, 1)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

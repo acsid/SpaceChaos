@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://bg6q6jujj3as3"]
+
+[ext_resource type="Script" path="res://weapons/ammo.gd" id="1_v44ds"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_myybd"]
+albedo_color = Color(0, 0.8, 0.8, 1)
+emission_enabled = true
+emission = Color(0.278431, 0.494118, 1, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1c86n"]
+material = SubResource("StandardMaterial3D_myybd")
+radius = 0.1
+height = 1.0
+radial_segments = 4
+rings = 1
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_omxlg"]
+radius = 0.1
+height = 1.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_253en"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath(".:hp")
+properties/1/spawn = true
+properties/1/sync = true
+
+[node name="Laser" type="Area3D"]
+script = ExtResource("1_v44ds")
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+mesh = SubResource("CapsuleMesh_1c86n")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGMesh3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0602, 0, -0.332439)
+light_color = Color(0, 0.866667, 0.866667, 1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_omxlg")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_253en")
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://erwo6pij7u3e"]
+
+[ext_resource type="PackedScene" uid="uid://cv1hp1o2vmtqp" path="res://maps/official/sun.tscn" id="1_7yj5i"]
+[ext_resource type="PackedScene" uid="uid://dq6iads52vnrk" path="res://maps/official/planet/earth.tscn" id="1_134ay"]
+
+[node name="SolarSys" type="Node3D"]
+
+[node name="Sun" parent="." instance=ExtResource("1_7yj5i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -354, 0, 0)
+
+[node name="Planet3" parent="." instance=ExtResource("1_134ay")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.1676, -91.6828, 0)
+
+[node name="Planet" parent="." instance=ExtResource("1_134ay")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.4648, 44.3868, 0)
+
+[node name="earth" parent="." instance=ExtResource("1_134ay")]
+
+[node name="Planet4" parent="." instance=ExtResource("1_134ay")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 93.9349, -30.5712, 0)
+
+[node name="Planet2" parent="." instance=ExtResource("1_134ay")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.421, 94.5271, 0)

@@ -1,0 +1,241 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8u4fbdssms8w"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_fqst5"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_fqst5")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 48.4457)
+fov = 100.0
+
+[node name="MapInstance" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="PanelContainer" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.366
+anchor_top = 0.389
+anchor_right = 0.624
+anchor_bottom = 0.611
+offset_left = 1.36798
+offset_top = -0.0720215
+offset_right = 2.15198
+offset_bottom = 0.071991
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Menu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/Menu/VBoxContainer"]
+layout_mode = 2
+text = "Pre-Alpha Menu"
+
+[node name="HostButton" type="Button" parent="Control/Menu/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="HSeparator" type="HSeparator" parent="Control/Menu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Username" type="LineEdit" parent="Control/Menu/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "PlayerName"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Menu/VBoxContainer"]
+layout_mode = 2
+
+[node name="ServerHost" type="LineEdit" parent="Control/Menu/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(225, 0)
+layout_mode = 2
+placeholder_text = "chaos.levikingman.com"
+
+[node name="ServerPort" type="LineEdit" parent="Control/Menu/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "42069"
+
+[node name="JoinButton" type="Button" parent="Control/Menu/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="ChatBox" type="PanelContainer" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.27
+anchor_bottom = 1.0
+offset_right = -3.04001
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/ChatBox"]
+layout_mode = 2
+
+[node name="Message" type="VBoxContainer" parent="Control/ChatBox/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Chatinput" type="PanelContainer" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/Chatinput"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Chatinput/MarginContainer"]
+layout_mode = 2
+
+[node name="Info" type="Label" parent="Control/Chatinput/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "MainChat: "
+
+[node name="InputMessage" type="LineEdit" parent="Control/Chatinput/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Lobby" type="PanelContainer" parent="Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.268
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.26398
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Lobby"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/Lobby/VBoxContainer"]
+layout_mode = 2
+text = "Server Lobby"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Lobby/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Lobby/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Faction" type="Label" parent="Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Humain"
+
+[node name="faction1" type="Button" parent="Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/Lobby/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Parsilon"
+
+[node name="faction2" type="Button" parent="Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Join"
+
+[node name="Hud" type="PanelContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="score" type="Label" parent="Control/Hud"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="Host" type="PanelContainer" parent="Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.0
+offset_top = -89.0
+offset_right = 156.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Host"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/Host/VBoxContainer"]
+layout_mode = 2
+text = "Host a server"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Host/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/Host/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Port:"
+
+[node name="LineEdit" type="LineEdit" parent="Control/Host/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "42069"
+
+[node name="Button_host" type="Button" parent="Control/Host/VBoxContainer"]
+layout_mode = 2
+text = "Start server"
+
+[node name="Button" type="Button" parent="Control/Host/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[node name="Space" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.178)
+
+[node name="Spawner" type="Node3D" parent="Space"]
+unique_name_in_owner = true
+
+[node name="Timer_Chatbox" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 10.0
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://player.tscn", "res://powerup.tscn")
+spawn_path = NodePath("../Space/Spawner")
+
+[connection signal="pressed" from="Control/Menu/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="Control/Menu/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer/faction1" to="." method="_on_faction_1_pressed"]
+[connection signal="pressed" from="Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer2/faction2" to="." method="_on_faction_2_pressed"]
+[connection signal="pressed" from="Control/Host/VBoxContainer/Button_host" to="." method="_on_button_host_pressed"]
+[connection signal="pressed" from="Control/Host/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="timeout" from="Timer_Chatbox" to="." method="_on_timer_chatbox_timeout"]
