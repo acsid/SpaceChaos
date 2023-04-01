@@ -1,7 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dq6iads52vnrk"]
 
 [ext_resource type="Script" path="res://maps/official/planet/planet.gd" id="1_v4yft"]
-[ext_resource type="PackedScene" uid="uid://b5dt1c2gtfbod" path="res://base.tscn" id="2_elau0"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_dsyuq"]
 radius = 10.0
@@ -15,6 +14,11 @@ emission = Color(0.282353, 0.321569, 0.372549, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_qj2r2"]
 radius = 27.0862
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yhcsp"]
+properties/0/path = NodePath(".:population")
+properties/0/spawn = true
+properties/0/sync = true
 
 [node name="Planet" type="CSGMesh3D"]
 mesh = SubResource("SphereMesh_dsyuq")
@@ -37,13 +41,14 @@ shape = SubResource("SphereShape3D_qj2r2")
 [node name="orbitpoint" type="Node3D" parent="Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.137539, 17.8925, 0)
 
-[node name="base" parent="." instance=ExtResource("2_elau0")]
-
 [node name="Timer" type="Timer" parent="."]
 wait_time = 15.0
 
 [node name="Spawn" type="Node3D" parent="." groups=["Spawners"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.786, 0, 13.032)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_yhcsp")
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

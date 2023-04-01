@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cvy6bqqrg8fbk"]
+[gd_scene load_steps=7 format=3 uid="uid://cvy6bqqrg8fbk"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_hpumn"]
 [ext_resource type="Script" path="res://FollowCamera.gd" id="2_akhb5"]
@@ -25,6 +25,9 @@ properties/4/sync = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qwfyb"]
 size = Vector3(5, 5, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_t5xr6"]
+size = Vector3(3, 1, 2)
 
 [node name="Player" type="CharacterBody3D" groups=["humans"]]
 axis_lock_linear_z = true
@@ -57,5 +60,72 @@ unique_name_in_owner = true
 wait_time = 10.0
 one_shot = true
 
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchor_left = 0.86
+anchor_top = 0.319
+anchor_right = 1.0
+anchor_bottom = 0.685
+offset_left = 24.28
+offset_top = 0.287994
+offset_bottom = -99.88
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Planet" type="PanelContainer" parent="Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -191.0
+offset_top = -19.5
+offset_bottom = 163.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Planet"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/Planet/VBoxContainer"]
+layout_mode = 2
+text = "Planet:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Planet/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/Planet/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Population:"
+
+[node name="POP" type="Label" parent="Control/Planet/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/Planet/VBoxContainer"]
+layout_mode = 2
+
+[node name="grab" type="Button" parent="Control/Planet/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Grab"
+
+[node name="drop" type="Button" parent="Control/Planet/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Drop"
+
+[node name="Cargo" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.00873, 0)
+mesh = SubResource("BoxMesh_t5xr6")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.9403)
+spot_range = 33.749
+
 [connection signal="timeout" from="Guns/Cooldown" to="." method="_on_cooldown_timeout"]
 [connection signal="timeout" from="Respawn" to="." method="_on_timer_timeout"]
+[connection signal="pressed" from="Control/Planet/VBoxContainer/HBoxContainer2/grab" to="." method="_on_grab_pressed"]
+[connection signal="pressed" from="Control/Planet/VBoxContainer/HBoxContainer2/drop" to="." method="_on_drop_pressed"]

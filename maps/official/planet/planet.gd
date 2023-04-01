@@ -1,14 +1,19 @@
 extends CSGMesh3D
 
 var powerups = preload("res://powerup.tscn")
+var base = preload("res://base.tscn")
 
-var population = 10
-
+@export var population = 10
+@export var colonisable = true
+@export var colonise = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if multiplayer.is_server():
 		$Timer.start()
+	if colonise:
+		var i = base.instantiate()
+		add_child(i)
 
 
 
@@ -16,6 +21,10 @@ func _ready():
 func _process(delta):
 	rotate_z(deg_to_rad(0.05))
 	%Area3D.rotate_z(deg_to_rad(0.1))
+	if not colonise && population > 1:
+		var i = base.instantiate()
+		add_child(i)
+		colonise = true
 
 
 
@@ -24,7 +33,7 @@ func _on_area_3d_body_entered(body):
 	if body.is_in_group("humans"):
 		get_tree().get_current_scene().send_message("RADIO:" ,"You can orbit the planet",false)
 		body.can_orbit = true
-		body.orbit = $Area3D/orbitpoint
+		body.orbit = self
 
 
 func _on_area_3d_body_exited(body):
@@ -32,7 +41,23 @@ func _on_area_3d_body_exited(body):
 	if body.is_in_group("humans"):
 		get_tree().get_current_scene().send_message("RADIO:" ,"you are leaving the orbit",false)
 		body.can_orbit = false
-		body.orbit = global_position
+
+func get_orbit():
+	return $Area3D/orbitpoint.global_position
+	
+@rpc("call_local", "any_peer")
+func drop_pop():
+	if not is_multiplayer_authority(): return
+	population += 1
+	if not colonise && population > 1:
+		var i = base.instantiate()
+		add_child(i)
+		colonise = true
+		
+@rpc("call_local", "any_peer")
+func pickup_pop():
+	if not is_multiplayer_authority(): return
+	population -= 1
 
 @rpc("call_local","any_peer")
 func spawn_powerup(n,rot):
@@ -44,4 +69,6 @@ func spawn_powerup(n,rot):
 
 func _on_timer_timeout():
 	if not is_multiplayer_authority(): return
-	spawn_powerup.rpc(str(rid_allocate_id()),Vector3(0,0,deg_to_rad(randi_range(0,360))))
+	if colonise:
+		spawn_powerup.rpc(str(rid_allocate_id()),Vector3(0,0,deg_to_rad(randi_range(0,360))))
+		population += 1

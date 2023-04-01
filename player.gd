@@ -13,13 +13,14 @@ const JUMP_VELOCITY = 4.5
 var can_orbit = false
 var orbit = PackedScene.new()
 var is_orbit = false
-var canshoot = false
+var canshoot = true
 var d := 0.0
 var laser = preload("res://weapons/laser.tscn")
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @export var score = 0
 @export var alive = true
+@export var population = 0
 func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
 	
@@ -33,19 +34,27 @@ func _ready():
 	username = main.username
 	position = main.spawn_random()
 	main.send_message.rpc("--",username + " Has joined the battle",false)
+	%Planet.hide()
 	
 	
 
 func _process(delta):
 	if not alive: return
-	if not is_multiplayer_authority():
-		return
+	if not is_multiplayer_authority():	return
+	if %Planet.visible:
+		%POP.text = str(orbit.population)
+	if population > 0 && not $Cargo.visible: 
+		$Cargo.show()
+	elif population < 1 && $Cargo.visible:
+		$Cargo.hide()
 	if Input.is_action_just_pressed("orbit"):
 		if can_orbit:
 			if is_orbit:
 				is_orbit = false
+				%Planet.hide()
 			else:
 				is_orbit = true
+				%Planet.show()
 	if Input.is_action_pressed("shoot") and canshoot:
 		shoot.rpc(str(rid_allocate_id()))
 		canshoot = false
@@ -86,7 +95,8 @@ func _physics_process(delta):
 
 func orbiting():
 	if can_orbit && is_orbit:
-		position = position.move_toward(orbit.global_position,0.1)
+		var orbi = orbit.get_orbit()
+		position = position.move_toward(orbi,0.1)
 	else:
 		is_orbit = false
 	
@@ -111,10 +121,32 @@ func damage(hp,from):
 	hitpoint -= hp
 	get_tree().get_current_scene().send_message("DMG", from + " hit " + str(hp) + "(life: " + str(hitpoint) + ")",false)
 	
+@rpc("call_local", "any_peer")
+func pickup_pop():
+	if not is_multiplayer_authority(): return
+	if orbit.population > 2:
+		population += 1
+		orbit.pickup_pop.rpc()
+		get_tree().get_current_scene().send_message("RADIO"," pickup",false)
 	
+@rpc("call_local", "any_peer")
+func drop_pop():
+	if not is_multiplayer_authority(): return
+	if population > 0:
+		population -= 1
+		orbit.drop_pop.rpc()
+
 func _on_cooldown_timeout():
 	canshoot = true
 
 
 func _on_timer_timeout():
 	respawn()
+
+
+func _on_grab_pressed():
+	pickup_pop.rpc()
+
+
+func _on_drop_pressed():
+	drop_pop.rpc()

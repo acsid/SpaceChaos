@@ -10,14 +10,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -354, 0, 0)
 
 [node name="Planet3" parent="." instance=ExtResource("1_134ay")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.1676, -91.6828, 0)
+population = 0
+colonise = false
 
 [node name="Planet" parent="." instance=ExtResource("1_134ay")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.4648, 44.3868, 0)
+population = 0
+colonise = false
 
 [node name="earth" parent="." instance=ExtResource("1_134ay")]
 
 [node name="Planet4" parent="." instance=ExtResource("1_134ay")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 93.9349, -30.5712, 0)
+population = 0
+colonise = false
 
 [node name="Planet2" parent="." instance=ExtResource("1_134ay")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.421, 94.5271, 0)
+population = 0
+colonise = false
