@@ -5,27 +5,45 @@
 
 [node name="SolarSys" type="Node3D"]
 
+[node name="Planet5" parent="." instance=ExtResource("1_134ay")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -237.896, -58.416, 0)
+colonisable = true
+
+[node name="Planet8" parent="." instance=ExtResource("1_134ay")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.0176, 279, 0)
+colonisable = true
+colonise = true
+
+[node name="Planet6" parent="." instance=ExtResource("1_134ay")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -317.215, 0, 0)
+colonisable = true
+colonise = true
+faction = 1
+
 [node name="Sun" parent="." instance=ExtResource("1_7yj5i")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -354, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.01764, 0, 0)
 
 [node name="Planet3" parent="." instance=ExtResource("1_134ay")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.1676, -91.6828, 0)
-population = 0
-colonise = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -207.183, 120.469, 0)
 
 [node name="Planet" parent="." instance=ExtResource("1_134ay")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.4648, 44.3868, 0)
-population = 0
-colonise = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 329.553, 44.3868, 0)
+colonisable = true
 
 [node name="earth" parent="." instance=ExtResource("1_134ay")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 388.223, 0, 0)
+colonisable = true
+colonise = true
+faction = 0
 
 [node name="Planet4" parent="." instance=ExtResource("1_134ay")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 93.9349, -30.5712, 0)
-population = 0
-colonise = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 327.294, -30.5712, 0)
+colonisable = true
 
 [node name="Planet2" parent="." instance=ExtResource("1_134ay")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.421, 94.5271, 0)
-population = 0
-colonise = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 459.439, 94.5271, 0)
+colonisable = true
+
+[node name="Planet7" parent="." instance=ExtResource("1_134ay")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -233.858, 135.995, 0)
+colonisable = true

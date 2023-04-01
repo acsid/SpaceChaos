@@ -3,17 +3,22 @@ extends CSGMesh3D
 var powerups = preload("res://powerup.tscn")
 var base = preload("res://base.tscn")
 
-@export var population = 10
-@export var colonisable = true
-@export var colonise = true
+@export var population = 0
+@export var colonisable = false
+@export var colonise = false
+enum avail_faction  {Humans,Parsilon,Pirates}
+@export var faction = 2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if multiplayer.is_server():
-		$Timer.start()
+	$Spawn.faction = faction
 	if colonise:
+		if multiplayer.is_server():
+			$Timer.start()
+			$Spawn.faction = faction
 		var i = base.instantiate()
 		add_child(i)
+		#color = Color(0,0,1,1)
 
 
 
@@ -25,12 +30,16 @@ func _process(delta):
 		var i = base.instantiate()
 		add_child(i)
 		colonise = true
+		$Spawn.faction = faction
+		#material.albedo_color = Color(0,0,1,1)
 
 
 
 func _on_area_3d_body_entered(body):
 	if multiplayer.is_server(): return
-	if body.is_in_group("humans"):
+	print(body.name,faction)
+	print(body.faction)
+	if body.faction == faction or colonisable != colonise:
 		get_tree().get_current_scene().send_message("RADIO:" ,"You can orbit the planet",false)
 		body.can_orbit = true
 		body.orbit = self
@@ -38,7 +47,7 @@ func _on_area_3d_body_entered(body):
 
 func _on_area_3d_body_exited(body):
 	if multiplayer.is_server(): return
-	if body.is_in_group("humans"):
+	if body.faction == faction:
 		get_tree().get_current_scene().send_message("RADIO:" ,"you are leaving the orbit",false)
 		body.can_orbit = false
 
@@ -46,13 +55,19 @@ func get_orbit():
 	return $Area3D/orbitpoint.global_position
 	
 @rpc("call_local", "any_peer")
-func drop_pop():
+func drop_pop(f):
 	if not is_multiplayer_authority(): return
 	population += 1
 	if not colonise && population > 1:
+		if multiplayer.is_server():
+			faction = f
+			$Timer.start()
+			$Spawn.faction = faction
 		var i = base.instantiate()
 		add_child(i)
 		colonise = true
+		faction = f
+		$Spawn.faction = faction
 		
 @rpc("call_local", "any_peer")
 func pickup_pop():

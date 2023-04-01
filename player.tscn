@@ -22,6 +22,9 @@ properties/3/sync = false
 properties/4/path = NodePath(".:score")
 properties/4/spawn = true
 properties/4/sync = true
+properties/5/path = NodePath(".:faction")
+properties/5/spawn = true
+properties/5/sync = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qwfyb"]
 size = Vector3(5, 5, 5)
@@ -29,7 +32,7 @@ size = Vector3(5, 5, 5)
 [sub_resource type="BoxMesh" id="BoxMesh_t5xr6"]
 size = Vector3(3, 1, 2)
 
-[node name="Player" type="CharacterBody3D" groups=["humans"]]
+[node name="Player" type="CharacterBody3D" groups=["humans", "player"]]
 axis_lock_linear_z = true
 script = ExtResource("1_hpumn")
 
@@ -94,6 +97,10 @@ layout_mode = 2
 layout_mode = 2
 text = "Planet:"
 
+[node name="Planet_name" type="Label" parent="Control/Planet/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/Planet/VBoxContainer"]
 layout_mode = 2
 
@@ -119,6 +126,7 @@ text = "Drop"
 
 [node name="Cargo" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.00873, 0)
+visible = false
 mesh = SubResource("BoxMesh_t5xr6")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="."]

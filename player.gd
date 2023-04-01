@@ -21,6 +21,8 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @export var score = 0
 @export var alive = true
 @export var population = 0
+enum avail_faction {Humans,Persilon,Pirates}
+@export var faction = avail_faction.Humans
 func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
 	
@@ -32,17 +34,29 @@ func _ready():
 	$Camera3D.make_current()
 	var main = get_tree().get_current_scene()
 	username = main.username
-	position = main.spawn_random()
+	#position = main.spawn_random(faction)
+	position = Vector3(0,0,0)
 	main.send_message.rpc("--",username + " Has joined the battle",false)
-	%Planet.hide()
+	main.me = self
+	lobby()
 	
 	
+func lobby():
+	var main = get_tree().get_current_scene()
+	hide()
+	$CollisionShape3D.disabled = true
+	alive = false
+	main.show_lobby()
 
 func _process(delta):
-	if not alive: return
+	if not alive: 
+		return
 	if not is_multiplayer_authority():	return
 	if %Planet.visible:
 		%POP.text = str(orbit.population)
+		%Planet_name.text = orbit.name
+		if not can_orbit:
+			%Planet.hide
 	if population > 0 && not $Cargo.visible: 
 		$Cargo.show()
 	elif population < 1 && $Cargo.visible:
@@ -59,17 +73,21 @@ func _process(delta):
 		shoot.rpc(str(rid_allocate_id()))
 		canshoot = false
 		%Cooldown.start()
-		if hitpoint <= 0:
-			hide()
-			%Respawn.start()
-			$CollisionShape3D.disabled = true
-			alive = false
+	if hitpoint <= 0:
+		lobby()
 
 
-func respawn():
+func respawn(f = avail_faction.Humans):
+	if not is_multiplayer_authority(): return
+	var main = get_tree().get_current_scene()
 	score = 0
 	hitpoint = 100
 	show()
+	position.z = 0
+	main.hide_lobby()
+	self.position = main.spawn_random(f)
+	alive = true
+	faction = f
 	$CollisionShape3D.disabled = false
 
 func _physics_process(delta):
@@ -113,6 +131,7 @@ func shoot(id):
 	inst.position = $Guns.global_position
 	inst.rotation = rotation
 	inst.name = id
+	
 	get_tree().get_current_scene().get_node("Space/Spawner").add_child(inst)
 
 @rpc("call_local", "any_peer")
@@ -132,9 +151,10 @@ func pickup_pop():
 @rpc("call_local", "any_peer")
 func drop_pop():
 	if not is_multiplayer_authority(): return
+	if orbit.faction != faction && orbit.colonise: return
 	if population > 0:
 		population -= 1
-		orbit.drop_pop.rpc()
+		orbit.drop_pop.rpc(faction)
 
 func _on_cooldown_timeout():
 	canshoot = true
@@ -150,3 +170,4 @@ func _on_grab_pressed():
 
 func _on_drop_pressed():
 	drop_pop.rpc()
+	

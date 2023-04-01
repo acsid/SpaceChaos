@@ -1,14 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://dq6iads52vnrk"]
+[gd_scene load_steps=7 format=3 uid="uid://dq6iads52vnrk"]
 
 [ext_resource type="Script" path="res://maps/official/planet/planet.gd" id="1_v4yft"]
+[ext_resource type="Script" path="res://maps/official/planet/Spawn.gd" id="2_7m08t"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_dsyuq"]
+[sub_resource type="SphereMesh" id="SphereMesh_5wxu5"]
 radius = 10.0
 height = 20.0
 radial_segments = 34
 rings = 10
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ndpme"]
+vertex_color_use_as_albedo = true
 emission_enabled = true
 emission = Color(0.282353, 0.321569, 0.372549, 1)
 
@@ -19,9 +21,18 @@ radius = 27.0862
 properties/0/path = NodePath(".:population")
 properties/0/spawn = true
 properties/0/sync = true
+properties/1/path = NodePath(".:faction")
+properties/1/spawn = true
+properties/1/sync = true
+properties/2/path = NodePath(".:colonise")
+properties/2/spawn = true
+properties/2/sync = true
+properties/3/path = NodePath(".:colonisable")
+properties/3/spawn = true
+properties/3/sync = true
 
 [node name="Planet" type="CSGMesh3D"]
-mesh = SubResource("SphereMesh_dsyuq")
+mesh = SubResource("SphereMesh_5wxu5")
 material = SubResource("StandardMaterial3D_ndpme")
 script = ExtResource("1_v4yft")
 
@@ -45,10 +56,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.137539, 17.8925, 0)
 wait_time = 15.0
 
 [node name="Spawn" type="Node3D" parent="." groups=["Spawners"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.786, 0, 13.032)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 0)
+script = ExtResource("2_7m08t")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_yhcsp")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://base.tscn")
+spawn_path = NodePath("..")
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

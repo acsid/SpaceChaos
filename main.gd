@@ -1,6 +1,6 @@
 extends Node
 
-var version = "0.1-c"
+var version = "0.1-d2"
 
 var player = preload("res://player.tscn")
 var map = preload("res://maps/official/solar_sys.tscn")
@@ -14,9 +14,14 @@ var username = ""
 
 var port = 42066
 
+var me =  PackedScene.new()
+
+enum avail_faction {Humans,Parsilon,Pirates}
+
+func _enter_tree():
+	send_message("Space Chaos ",version,false)
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	send_message("Space Chaos ",version,false)
 	%Chatinput.hide()
 	%Lobby.hide()
 	%Host.hide()
@@ -24,8 +29,23 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-
-	pass
+	if %Lobby.visible:
+		%Stats_ponline.text = str(get_tree().get_nodes_in_group("player").size());
+	if multiplayer.is_server():
+		var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+		%Camera3D.position.x += input_dir.x
+		%Camera3D.position.y -= input_dir.y
+		if Input.is_key_pressed(KEY_KP_ADD):
+			%Camera3D.position.z -= 1
+			print(%Camera3D.position.z);
+		if Input.is_key_pressed(KEY_KP_SUBTRACT):
+			%Camera3D.position.z += 1
+			print(%Camera3D.position.z);
+		if Input.is_key_pressed(KEY_TAB):
+			if %Lobby.visible:
+				%Lobby.hide()
+			else:
+				%Lobby.show()
 
 
 
@@ -69,7 +89,6 @@ func send_message(player_name,message,is_server):
 	msg_node.add_child(HBox)
 	var label_name = Label.new()
 	if is_server:
-		player_name = "@SERVER"
 		label_name.modulate = Color(1,0,0)
 	label_name.text = player_name
 	var label_msg = Label.new()
@@ -80,7 +99,8 @@ func send_message(player_name,message,is_server):
 	if msg_node.get_child_count() > 10 :
 		msg_node.get_child(0). queue_free()
 	%ChatBox.show()
-	%Timer_Chatbox.start()
+	if not %Lobby.visible:
+		%Timer_Chatbox.start()
 
 
 
@@ -102,13 +122,12 @@ func _on_join_button_pressed():
 func add_player(id):
 	var player_instanfce = player.instantiate()
 	player_instanfce.name = str(id)
-	player_instanfce.position = spawn_random()
 	%Spawner.add_child(player_instanfce)
 	#send_message.rpc(str(id), " Joined the game", false)
 	
 func remove_player(id):
-	var player = %Spawner.get_node_or_null(str(id))
-	player.queue_free()
+	var playr = %Spawner.get_node_or_null(str(id))
+	playr.queue_free()
 	#send_message.rpc(str(id), " Left the game", false)
 	
 func load_game():
@@ -116,15 +135,33 @@ func load_game():
 	var map_instance = map.instantiate()
 	%MapInstance.add_child(map_instance)
 	%Menu.hide()
+	show_lobby()
+
+func show_lobby():
+	%Lobby.show()
+	if multiplayer.is_server():
+		$Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer/faction1.hide()
+		$Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer2/faction2.hide()
+		$Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer3/faction3.hide()
+func hide_lobby():
+	%Lobby.hide()
 
 func server_offline():
 	%Menu.show()
 	%MapInstance.get_child(0). queue_free()
 
-func spawn_random():
-	var rnd = get_tree().get_nodes_in_group("Spawners").pick_random().global_position 
-	rnd.z = 0
-	return rnd
+func spawn_random(faction = avail_faction.Pirates):
+	var good_spawn = false
+	#var rnd = get_tree().get_nodes_in_group("Spawners").pick_random()
+	while !good_spawn:
+		var rnd = get_tree().get_nodes_in_group("Spawners").pick_random()
+		if rnd.faction == faction:
+			good_spawn = true
+			return rnd.global_position
+
+		
+
+
 	#print(get_tree().get_nodes_in_group("Spawners").size())
 
 
@@ -139,12 +176,16 @@ func _on_timer_chatbox_timeout():
 
 
 func _on_faction_1_pressed():
-	pass # Replace with function body.
+	send_message("","Join as humans",true)
+	me.add_to_group("humans")
+	me.respawn(avail_faction.Humans)
+
 
 
 func _on_faction_2_pressed():
-	pass # Replace with function body.
-
+	send_message("Game","Join as Parsilon",true)
+	me.add_to_group("Parsilon")
+	me.respawn(avail_faction.Parsilon)
 
 func _on_button_host_pressed():
 	start_server()
@@ -154,3 +195,9 @@ func _on_button_host_pressed():
 func _on_button_pressed():
 	%Host.hide()
 	%Menu.show()
+
+
+func _on_faction_3_pressed():
+	send_message("Game","Join as a Pirates",true)
+	me.add_to_group("Pirates")
+	me.respawn(avail_faction.Pirates)
