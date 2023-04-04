@@ -4,5 +4,5 @@
 size = Vector3(5, 5, 5)
 
 [node name="base" type="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.4935)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
 mesh = SubResource("BoxMesh_e74cx")
