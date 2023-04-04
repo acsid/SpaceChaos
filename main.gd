@@ -1,10 +1,9 @@
 extends Node
 
-var version = "0.1-d2"
+var version = "0.1-c"
 
 var player = preload("res://player.tscn")
 var map = preload("res://maps/official/solar_sys.tscn")
-
 var powerup = preload("res://powerup.tscn")
 
 var peer = ENetMultiplayerPeer.new()
@@ -13,10 +12,12 @@ var enter_key_pressed = false
 var username = ""
 
 var port = 42066
-
 var me =  PackedScene.new()
-
 enum avail_faction {Humans,Parsilon,Pirates}
+
+var thread = null
+signal upnp_complete
+
 
 func _enter_tree():
 	send_message("Space Chaos ",version,false)
@@ -25,7 +26,6 @@ func _ready():
 	%Chatinput.hide()
 	%Lobby.hide()
 	%Host.hide()
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -46,8 +46,6 @@ func _process(delta):
 				%Lobby.hide()
 			else:
 				%Lobby.show()
-
-
 
 func _input(event):
 	if %Menu.visible: return
@@ -72,15 +70,16 @@ func _on_host_button_pressed():
 	%Menu.hide()
 	%Host.show()
 
-
 func start_server():
 	peer.create_server(port)
 	multiplayer.multiplayer_peer = peer
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(remove_player)
 	send_message("Server","started waiting for players",false)
+	send_message("Server","upnp start",false)
+	thread = Thread.new()
+	thread.start(_upnp_start.bind(port))
 	load_game()
-
 
 @rpc("call_local","any_peer")
 func send_message(player_name,message,is_server):
@@ -101,8 +100,6 @@ func send_message(player_name,message,is_server):
 	%ChatBox.show()
 	if not %Lobby.visible:
 		%Timer_Chatbox.start()
-
-
 
 func _on_join_button_pressed():
 	if %ServerHost.text == "":
@@ -149,7 +146,28 @@ func hide_lobby():
 func server_offline():
 	%Menu.show()
 	%MapInstance.get_child(0). queue_free()
+	
+	
+	
+func _upnp_start(server_port):
+	var upnp = UPNP.new()
+	var err = upnp.discover()
+	
+	if err != OK:
+		push_error(str(err))
+		emit_signal("upnp_complete", err)
+		return
+	
+	if upnp.get_gateway() and upnp.get_gateway().is_valid_gateway():
+		upnp.add_port_mapping(server_port, server_port, ProjectSettings.get_setting("application/config/name"), "UDP")
+		upnp.add_port_mapping(server_port, server_port, ProjectSettings.get_setting("application/config/name"), "TCP")
+		emit_signal("upnp_completed", OK)
 
+	
+func _exit_tree():
+	if thread:
+		print('missing something')
+	
 func spawn_random(faction = avail_faction.Pirates):
 	var good_spawn = false
 	#var rnd = get_tree().get_nodes_in_group("Spawners").pick_random()
@@ -159,11 +177,8 @@ func spawn_random(faction = avail_faction.Pirates):
 			good_spawn = true
 			return rnd.global_position
 
-		
-
-
-	#print(get_tree().get_nodes_in_group("Spawners").size())
-
+func _on_upnp_complete(status):
+	send_message("Server","upnp " + str(status) ,false)
 
 func update_UiScore(score):
 	%score.text = str(score)
@@ -171,16 +186,10 @@ func update_UiScore(score):
 func _on_timer_chatbox_timeout():
 	%ChatBox.hide()
 
-
-
-
-
 func _on_faction_1_pressed():
 	send_message("","Join as humans",true)
 	me.add_to_group("humans")
 	me.respawn(avail_faction.Humans)
-
-
 
 func _on_faction_2_pressed():
 	send_message("Game","Join as Parsilon",true)
@@ -191,13 +200,12 @@ func _on_button_host_pressed():
 	start_server()
 	%Host.hide()
 
-
 func _on_button_pressed():
 	%Host.hide()
 	%Menu.show()
-
 
 func _on_faction_3_pressed():
 	send_message("Game","Join as a Pirates",true)
 	me.add_to_group("Pirates")
 	me.respawn(avail_faction.Pirates)
+
