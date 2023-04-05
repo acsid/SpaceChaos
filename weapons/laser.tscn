@@ -1,15 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://bg6q6jujj3as3"]
+[gd_scene load_steps=7 format=3 uid="uid://bg6q6jujj3as3"]
 
 [ext_resource type="Script" path="res://weapons/ammo.gd" id="1_v44ds"]
+[ext_resource type="Shader" path="res://weapons/laser.gdshader" id="2_im4l2"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_myybd"]
-albedo_color = Color(0, 0.8, 0.8, 1)
-emission_enabled = true
-emission = Color(0.278431, 0.494118, 1, 1)
-emission_energy_multiplier = 5.0
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_87e5l"]
+render_priority = 0
+shader = ExtResource("2_im4l2")
+shader_parameter/emit = true
+shader_parameter/color = Color(0, 1, 0, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_1c86n"]
-material = SubResource("StandardMaterial3D_myybd")
+material = SubResource("ShaderMaterial_87e5l")
 radius = 0.1
 height = 1.0
 radial_segments = 4
