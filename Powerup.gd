@@ -28,5 +28,5 @@ func _on_body_entered(body):
 
 
 func _on_timer_timeout():
-	if not is_multiplayer_authority():
-		rpcfree.rpc()
+	if not multiplayer.is_server(): return
+	rpcfree.rpc()
