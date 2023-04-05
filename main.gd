@@ -11,7 +11,7 @@ var peer = ENetMultiplayerPeer.new()
 var enter_key_pressed = false
 var username = ""
 
-var port = 42066
+var port = 42069
 var me =  PackedScene.new()
 enum avail_faction {Humans,Parsilon,Pirates}
 
@@ -23,9 +23,17 @@ func _enter_tree():
 	send_message("Space Chaos ",version,false)
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if OS.get_cmdline_args():
+		print("arg ",OS.get_cmdline_args() )
+		var arg = OS.get_cmdline_args() 
+		print(arg[0])
+		if OS.get_cmdline_args()[0] == "--server":
+			print("Starting Space Chaos Dedicated Server")
+			start_server()
 	%Chatinput.hide()
 	%Lobby.hide()
 	%Host.hide()
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -94,6 +102,7 @@ func send_message(player_name,message,is_server):
 	label_msg.text = ": " + message
 	HBox.add_child(label_name)
 	HBox.add_child(label_msg)
+	print(player_name,": ",message)
 	#only keep last 10 msg
 	if msg_node.get_child_count() > 10 :
 		msg_node.get_child(0). queue_free()
@@ -178,7 +187,10 @@ func spawn_random(faction = avail_faction.Pirates):
 			return rnd.global_position
 
 func _on_upnp_complete(status):
-	send_message("Server","upnp " + str(status) ,false)
+	if (status == 27) :
+		send_message("UPNP"," Cannot find upnp device " + str(status) ,true)
+	else:
+		send_message("UPNP","Error: " + str(status) ,false)
 
 func update_UiScore(score):
 	%score.text = str(score)
