@@ -224,18 +224,38 @@ text = "Total"
 layout_mode = 2
 
 [node name="Hud" type="PanelContainer" parent="Control"]
+unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -40.0
-offset_bottom = 40.0
-grow_horizontal = 0
+anchor_bottom = 1.0
+offset_top = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="Control/Hud"]
+layout_mode = 2
 
 [node name="score" type="Label" parent="Control/Hud"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 text = "0"
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/Hud"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="SubViewport" type="SubViewport" parent="Control/Hud/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(200, 200)
+render_target_update_mode = 4
+
+[node name="Minimap" type="Camera3D" parent="Control/Hud/SubViewportContainer/SubViewport"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 319.691)
+current = true
 
 [node name="Host" type="PanelContainer" parent="Control"]
 unique_name_in_owner = true

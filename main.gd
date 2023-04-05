@@ -1,6 +1,6 @@
 extends Node
 
-var version = "0.1-c"
+var version = "0.1-e"
 
 var player = preload("res://player.tscn")
 var map = preload("res://maps/official/solar_sys.tscn")
@@ -33,6 +33,7 @@ func _ready():
 	%Chatinput.hide()
 	%Lobby.hide()
 	%Host.hide()
+	%Hud.hide()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -54,6 +55,9 @@ func _process(delta):
 				%Lobby.hide()
 			else:
 				%Lobby.show()
+	if %Hud.visible:
+		%Minimap.global_position.x = me.global_position.x
+		%Minimap.global_position.y = me.global_position.y
 
 func _input(event):
 	if %Menu.visible: return
@@ -61,7 +65,6 @@ func _input(event):
 		if not enter_key_pressed:
 			enter_key_pressed = true
 			%Chatinput.visible = !%Chatinput.visible
-			
 			if not %Chatinput.visible:
 				if %InputMessage.text != "":
 					send_message.rpc(%Username.text,%InputMessage.text,multiplayer.is_server())
@@ -149,8 +152,15 @@ func show_lobby():
 		$Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer/faction1.hide()
 		$Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer2/faction2.hide()
 		$Control/Lobby/VBoxContainer/HBoxContainer/VBoxContainer3/faction3.hide()
+
 func hide_lobby():
 	%Lobby.hide()
+
+func show_hud():
+	%Hud.show()
+
+func hide_hud():
+	%Hud.hide()
 
 func server_offline():
 	%Menu.show()

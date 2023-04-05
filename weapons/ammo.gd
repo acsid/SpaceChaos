@@ -29,4 +29,4 @@ func _on_body_entered(body):
 
 func _on_timer_timeout():
 	if multiplayer.is_server():
-		queue_free()
+		rpcfree.rpc()

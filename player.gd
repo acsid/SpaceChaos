@@ -85,6 +85,7 @@ func respawn(f = avail_faction.Humans):
 	show()
 	position.z = 0
 	main.hide_lobby()
+	main.show_hud()
 	self.position = main.spawn_random(f)
 	alive = true
 	faction = f
