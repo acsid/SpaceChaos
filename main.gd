@@ -115,7 +115,7 @@ func send_message(player_name,message,is_server):
 
 func _on_join_button_pressed():
 	if %ServerHost.text == "":
-		%ServerHost.text = "localhost"
+		%ServerHost.text = "23.94.148.31"
 	if %ServerPort.text == "":
 		%ServerPort.text = str(port)
 	peer.create_client(%ServerHost.text,port)
@@ -164,6 +164,7 @@ func hide_hud():
 
 func server_offline():
 	%Menu.show()
+	%Hud.hide()
 	%MapInstance.get_child(0). queue_free()
 	
 	
