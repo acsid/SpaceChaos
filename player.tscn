@@ -1,10 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://cvy6bqqrg8fbk"]
+[gd_scene load_steps=9 format=3 uid="uid://cvy6bqqrg8fbk"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_hpumn"]
 [ext_resource type="Script" path="res://FollowCamera.gd" id="2_akhb5"]
+[ext_resource type="Shader" path="res://vessel/player.gdshader" id="2_j07tm"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_0dwdc"]
 size = Vector3(5, 7, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bw5en"]
+render_priority = 0
+shader = ExtResource("2_j07tm")
+shader_parameter/color = Color(0.4, 0.2, 0.5, 1)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rsley"]
 properties/0/path = NodePath(".:position")
@@ -38,6 +44,7 @@ script = ExtResource("1_hpumn")
 
 [node name="CSGMesh3D" type="CSGMesh3D" parent="."]
 mesh = SubResource("PrismMesh_0dwdc")
+material = SubResource("ShaderMaterial_bw5en")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_rsley")

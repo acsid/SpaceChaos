@@ -37,19 +37,19 @@ func _process(delta):
 
 func _on_area_3d_body_entered(body):
 	if multiplayer.is_server(): return
-	print(body.name,faction)
-	print(body.faction)
-	if body.faction == faction or colonisable != colonise:
-		get_tree().get_current_scene().send_message("RADIO:" ,"You can orbit the planet",false)
-		body.can_orbit = true
-		body.orbit = self
+	if body.is_in_group("player"):
+		if body.faction == faction or colonisable != colonise:
+			get_tree().get_current_scene().send_message("RADIO:" ,"You can orbit the planet",false)
+			body.can_orbit = true
+			body.orbit = self
 
 
 func _on_area_3d_body_exited(body):
 	if multiplayer.is_server(): return
-	if body.faction == faction:
-		get_tree().get_current_scene().send_message("RADIO:" ,"you are leaving the orbit",false)
-		body.can_orbit = false
+	if body.is_in_group("player"):
+		if body.faction == faction:
+			get_tree().get_current_scene().send_message("RADIO:" ,"you are leaving the orbit",false)
+			body.can_orbit = false
 
 func get_orbit():
 	return $Area3D/orbitpoint.global_position
