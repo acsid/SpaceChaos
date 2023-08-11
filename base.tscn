@@ -1,20 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://b5dt1c2gtfbod"]
+[gd_scene load_steps=6 format=3 uid="uid://b5dt1c2gtfbod"]
 
 [ext_resource type="Script" path="res://base.gd" id="1_tyidf"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_e74cx"]
-size = Vector3(5, 5, 5)
+[ext_resource type="ArrayMesh" uid="uid://bjyex1q158v5u" path="res://maps/official/planet/base1.obj" id="2_0yc8u"]
+[ext_resource type="Script" path="res://BaseCanon.gd" id="3_oci1w"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wayjr"]
 size = Vector3(5, 5, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_a5vuk"]
 
 [node name="StaticBody3D" type="StaticBody3D"]
 script = ExtResource("1_tyidf")
 
 [node name="base" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
-mesh = SubResource("BoxMesh_e74cx")
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 10)
+mesh = ExtResource("2_0yc8u")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.2497)
 shape = SubResource("BoxShape3D_wayjr")
+
+[node name="BaseCanon" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.2247)
+mesh = SubResource("BoxMesh_a5vuk")
+script = ExtResource("3_oci1w")
