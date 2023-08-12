@@ -1,6 +1,6 @@
 extends Node
 
-var version = "0.1-e"
+var version = "0.2-a0"
 
 var player = preload("res://player.tscn")
 var map = preload("res://maps/official/solar_sys.tscn")
@@ -21,6 +21,7 @@ signal upnp_complete
 
 func _enter_tree():
 	send_message("Space Chaos ",version,false)
+	send_message("d3s","gg5ey66",false)
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if OS.get_cmdline_args():
