@@ -20,8 +20,7 @@ signal upnp_complete
 
 
 func _enter_tree():
-	send_message("Space Chaos ",version,false)
-	send_message("d3s","gg5ey66",false)
+	pass
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if OS.get_cmdline_args():
@@ -35,6 +34,8 @@ func _ready():
 	%Lobby.hide()
 	%Host.hide()
 	%Hud.hide()
+	send_message("Space Chaos ",version,false)
+	send_message("ALPHA","vikingman.itch.io",false)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -113,7 +114,6 @@ func send_message(player_name,message,is_server):
 	%ChatBox.show()
 	if not %Lobby.visible:
 		%Timer_Chatbox.start()
-
 func _on_join_button_pressed():
 	if %ServerHost.text == "":
 		%ServerHost.text = "23.94.148.31"
@@ -233,3 +233,8 @@ func _on_faction_3_pressed():
 	me.add_to_group("Pirates")
 	me.respawn(avail_faction.Pirates)
 
+func checkPause():
+	if %Spawner.get_nodes_in_group("player").length() > 0:
+		World.serverEmpty = false
+	else:
+		World.serverEmpty = true

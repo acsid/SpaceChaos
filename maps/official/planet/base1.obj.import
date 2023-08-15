@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bjyex1q158v5u"
+path="res://.godot/imported/base1.obj-6920114a1cc007441fe9b59a3372a781.mesh"
+
+[deps]
+
+files=["res://.godot/imported/base1.obj-6920114a1cc007441fe9b59a3372a781.mesh"]
+
+source_file="res://maps/official/planet/base1.obj"
+dest_files=["res://.godot/imported/base1.obj-6920114a1cc007441fe9b59a3372a781.mesh", "res://.godot/imported/base1.obj-6920114a1cc007441fe9b59a3372a781.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

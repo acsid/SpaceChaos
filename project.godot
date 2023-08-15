@@ -18,6 +18,10 @@ boot_splash/image="res://images/loading.png"
 boot_splash/use_filter=false
 config/icon="res://icon.svg"
 
+[autoload]
+
+World="*res://world.gd"
+
 [input]
 
 shoot={

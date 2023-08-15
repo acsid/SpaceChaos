@@ -84,6 +84,7 @@ func spawn_powerup(n,rot):
 
 func _on_timer_timeout():
 	if not is_multiplayer_authority(): return
+	if not World.serverEmpty: return
 	if colonise:
 		spawn_powerup.rpc(str(rid_allocate_id()),Vector3(0,0,deg_to_rad(randi_range(0,360))))
 		population += 1

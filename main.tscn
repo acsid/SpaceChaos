@@ -54,28 +54,27 @@ placeholder_text = "PlayerName"
 custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-item_count = 1
+item_count = 2
 item_0/text = "official server"
+item_1/text = "test server"
+item_1/disabled = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/Menu/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Control/Menu/VBoxContainer/HBoxContainer"]
-visible = false
 layout_mode = 2
-text = "url
+text = "server: 
 "
 
 [node name="ServerHost" type="LineEdit" parent="Control/Menu/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-visible = false
 custom_minimum_size = Vector2(225, 0)
 layout_mode = 2
 placeholder_text = "chaos.levikingman.com"
 
 [node name="ServerPort" type="LineEdit" parent="Control/Menu/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 placeholder_text = "42069"
 

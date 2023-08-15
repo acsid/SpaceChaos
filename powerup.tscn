@@ -14,9 +14,11 @@ rings = 1
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/sync = true
+properties/0/watch = false
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/sync = true
+properties/1/watch = false
 
 [node name="Powerup" type="Area3D"]
 script = ExtResource("1_tqopy")

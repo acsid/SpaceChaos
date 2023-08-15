@@ -2,7 +2,7 @@ extends CharacterBody3D
 enum state {free,orbit}
 
 const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
+
 @export var rotation_speed:= 100.0
 @export var max_speed := 15.0
 @export var acceleration := 1.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5dt1c2gtfbod"]
+[gd_scene load_steps=9 format=3 uid="uid://b5dt1c2gtfbod"]
 
 [ext_resource type="Script" path="res://base.gd" id="1_tyidf"]
 [ext_resource type="ArrayMesh" uid="uid://bjyex1q158v5u" path="res://maps/official/planet/base1.obj" id="2_0yc8u"]
@@ -8,6 +8,17 @@
 size = Vector3(5, 5, 5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_a5vuk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6m0m8"]
+size = Vector3(7.31543, 21.7195, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nofh8"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_od2o2"]
+properties/0/path = NodePath("BaseCanon:rotation")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
 
 [node name="StaticBody3D" type="StaticBody3D"]
 script = ExtResource("1_tyidf")
@@ -24,3 +35,27 @@ shape = SubResource("BoxShape3D_wayjr")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.2247)
 mesh = SubResource("BoxMesh_a5vuk")
 script = ExtResource("3_oci1w")
+
+[node name="Area3D" type="Area3D" parent="BaseCanon"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BaseCanon/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.956, 0)
+shape = SubResource("BoxShape3D_6m0m8")
+
+[node name="Guns" type="Node3D" parent="BaseCanon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.832279, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BaseCanon"]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0.931643, 0)
+mesh = SubResource("BoxMesh_nofh8")
+
+[node name="Trigger_Timer" type="Timer" parent="BaseCanon"]
+wait_time = 0.3
+autostart = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_od2o2")
+
+[connection signal="body_entered" from="BaseCanon/Area3D" to="BaseCanon" method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="BaseCanon/Area3D" to="BaseCanon" method="_on_area_3d_body_exited"]
+[connection signal="timeout" from="BaseCanon/Trigger_Timer" to="BaseCanon" method="_on_trigger_timer_timeout"]
